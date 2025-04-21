@@ -9,7 +9,7 @@ const maxAge = 60 * 60 * 24 * 1;
 
 const jwtSignature = (id,name,email) => {
   const payload = { id,name,email };
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: maxAge });
+  return jwt.sign(payload, JWT_SECRET, {expiresIn: '1h' });
 };
 
 router.get("/getAll", (req, res) => {
@@ -27,10 +27,18 @@ router.post("/addSeller",(req, res) => {
   console.log(req.body);
   // const { name, email, password, phoneNumber } = req.body;
   //asynchronous that why we will get promise obj
-  new Model(req.body)
-    .save().then((result) => {
+  const sellerData = {
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password, // Ensure this is hashed
+    phoneNumber: req.body.phoneNumber
+  };
+  new Model(sellerData)
+    .save()
+    //thenc is the shortcut
+    .then((result) => {
       const token = jwtSignature(result._id,result.name,result.email);
-      console.log(`add route ${token}`);
+      console.log(`Signup :-->${token}`);
       res.status(200).json({token: token,
         seller:{ name: result.name,
           email: result.email,
@@ -50,20 +58,21 @@ router.post("/authenticate", (req, res) => {
       if (result) {
         //JWT to generate and verify the token and .env is used
         //payload , secretkey, expiry
-        console.log(result);
-        const { id, name,email, password } = result;
+
+        const { _id,name,email,password } = result;
         if (password === req.body.password) {
-          const payload = { id,name,email};
+          const payload = { id:_id,name,email };
           jwt.sign(
             payload,
-            "process.env.JWT_SECRET",
-            { expiresIn: "1hr" },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' },
             (err, token) => {
               if (err) {
                 console.log(err);
                 return res.status(500).json(err);
               } else {
-                console.log(`auth route ${token}`);
+                console.log(`login :-->${token}`);
+                console.log(payload);
                 return res.status(200).json({ token: token,
                   seller:{name:result.name,
                   email:result.email,
