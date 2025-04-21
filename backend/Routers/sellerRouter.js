@@ -28,10 +28,9 @@ router.post("/addSeller",(req, res) => {
   // const { name, email, password, phoneNumber } = req.body;
   //asynchronous that why we will get promise obj
   new Model(req.body)
-    .save()
-    //thenc is the shortcut
-    .then((result) => {
+    .save().then((result) => {
       const token = jwtSignature(result._id,result.name,result.email);
+      console.log(`add route ${token}`);
       res.status(200).json({token: token,
         seller:{ name: result.name,
           email: result.email,
@@ -51,10 +50,10 @@ router.post("/authenticate", (req, res) => {
       if (result) {
         //JWT to generate and verify the token and .env is used
         //payload , secretkey, expiry
-
-        const { _id, email, password } = result;
+        console.log(result);
+        const { id, name,email, password } = result;
         if (password === req.body.password) {
-          const payload = { _id, email, password };
+          const payload = { id,name,email};
           jwt.sign(
             payload,
             "process.env.JWT_SECRET",
@@ -64,6 +63,7 @@ router.post("/authenticate", (req, res) => {
                 console.log(err);
                 return res.status(500).json(err);
               } else {
+                console.log(`auth route ${token}`);
                 return res.status(200).json({ token: token,
                   seller:{name:result.name,
                   email:result.email,
