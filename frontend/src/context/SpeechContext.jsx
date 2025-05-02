@@ -32,12 +32,17 @@ const SpeechProvider = ({ children }) => {
           window.location.href = "/seller-login";
         }
 
+        if (transcript.toLowerCase().includes("register")) {
+          console.log("seller login command detected");
+          window.location.href = "/seller-signup";
+        }
+
         if (transcript.toLowerCase().includes("add product")) {
           console.log("seller login command detected");
           window.location.href = "/seller/add-product";
         }
         
-        if (transcript.toLowerCase().includes("sign in")) {
+        if (transcript.toLowerCase().includes("in")) {
           console.log("login command detected");
           setTriggerLogin(true); // Trigger login action in SellerLogin component
         }
