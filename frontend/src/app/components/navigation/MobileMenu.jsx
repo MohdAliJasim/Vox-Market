@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link, NavLink } from 'react-router-dom';
+import Link from 'next/link';
 import { ChevronDown, ChevronRight, ShoppingCart, User, Package, Search } from 'lucide-react';
 import { useState } from 'react';
 
@@ -88,8 +88,8 @@ const MobileMenu = ({ isOpen, onClose }) => {
                   custom={0}
                   variants={linkVariants}
                 >
-                  <NavLink
-                    to="/"
+                  <Link
+                    href="/"
                     className={({ isActive }) =>
                       `flex items-center py-3 px-2 rounded-lg transition-colors ${
                         isActive ? 'bg-primary-50 text-primary-500' : 'text-neutral-800 hover:bg-neutral-50'
@@ -98,15 +98,15 @@ const MobileMenu = ({ isOpen, onClose }) => {
                     onClick={onClose}
                   >
                     Home
-                  </NavLink>
+                  </Link>
                 </motion.li>
 
                 <motion.li
                   custom={1}
                   variants={linkVariants}
                 >
-                  <NavLink
-                    to="/products"
+                  <Link
+                    href="/products"
                     className={({ isActive }) =>
                       `flex items-center py-3 px-2 rounded-lg transition-colors ${
                         isActive ? 'bg-primary-50 text-primary-500' : 'text-neutral-800 hover:bg-neutral-50'
@@ -115,7 +115,7 @@ const MobileMenu = ({ isOpen, onClose }) => {
                     onClick={onClose}
                   >
                     Products
-                  </NavLink>
+                  </Link>
                 </motion.li>
 
                 <motion.li
@@ -140,7 +140,7 @@ const MobileMenu = ({ isOpen, onClose }) => {
                       >
                         <li>
                           <Link
-                            to="/category/electronics"
+                            href="/category/electronics"
                             className="flex items-center py-2 px-2 rounded-lg transition-colors text-neutral-700 hover:bg-neutral-50"
                             onClick={onClose}
                           >
@@ -149,7 +149,7 @@ const MobileMenu = ({ isOpen, onClose }) => {
                         </li>
                         <li>
                           <Link
-                            to="/category/clothing"
+                            href="/category/clothing"
                             className="flex items-center py-2 px-2 rounded-lg transition-colors text-neutral-700 hover:bg-neutral-50"
                             onClick={onClose}
                           >
@@ -158,7 +158,7 @@ const MobileMenu = ({ isOpen, onClose }) => {
                         </li>
                         <li>
                           <Link
-                            to="/category/home"
+                            href="/category/home"
                             className="flex items-center py-2 px-2 rounded-lg transition-colors text-neutral-700 hover:bg-neutral-50"
                             onClick={onClose}
                           >
@@ -167,7 +167,7 @@ const MobileMenu = ({ isOpen, onClose }) => {
                         </li>
                         <li>
                           <Link
-                            to="/category/beauty"
+                            href="/category/beauty"
                             className="flex items-center py-2 px-2 rounded-lg transition-colors text-neutral-700 hover:bg-neutral-50"
                             onClick={onClose}
                           >
@@ -183,8 +183,8 @@ const MobileMenu = ({ isOpen, onClose }) => {
                   custom={3}
                   variants={linkVariants}
                 >
-                  <NavLink
-                    to="/contact"
+                  <Link
+                    href="/contact"
                     className={({ isActive }) =>
                       `flex items-center py-3 px-2 rounded-lg transition-colors ${
                         isActive ? 'bg-primary-50 text-primary-500' : 'text-neutral-800 hover:bg-neutral-50'
@@ -193,15 +193,15 @@ const MobileMenu = ({ isOpen, onClose }) => {
                     onClick={onClose}
                   >
                     Contact
-                  </NavLink>
+                  </Link>
                 </motion.li>
 
                 <motion.li
                   custom={4}
                   variants={linkVariants}
                 >
-                  <NavLink
-                    to="/feedback"
+                  <Link
+                    href="/feedback"
                     className={({ isActive }) =>
                       `flex items-center py-3 px-2 rounded-lg transition-colors ${
                         isActive ? 'bg-primary-50 text-primary-500' : 'text-neutral-800 hover:bg-neutral-50'
@@ -210,7 +210,7 @@ const MobileMenu = ({ isOpen, onClose }) => {
                     onClick={onClose}
                   >
                     Feedback
-                  </NavLink>
+                  </Link>
                 </motion.li>
               </ul>
 
@@ -220,53 +220,53 @@ const MobileMenu = ({ isOpen, onClose }) => {
                     custom={5}
                     variants={linkVariants}
                   >
-                    <NavLink
-                      to="/login"
+                    <Link
+                      href="/login"
                       className="flex items-center py-3 px-2 rounded-lg transition-colors text-neutral-800 hover:bg-neutral-50"
                       onClick={onClose}
                     >
                       <User size={18} className="mr-2" />
                       Login
-                    </NavLink>
+                    </Link>
                   </motion.li>
                   <motion.li
                     custom={6}
                     variants={linkVariants}
                   >
-                    <NavLink
-                      to="/signup"
+                    <Link
+                      href="/signup"
                       className="flex items-center py-3 px-2 rounded-lg transition-colors text-neutral-800 hover:bg-neutral-50"
                       onClick={onClose}
                     >
                       <User size={18} className="mr-2" />
                       Signup
-                    </NavLink>
+                    </Link>
                   </motion.li>
                   <motion.li
                     custom={7}
                     variants={linkVariants}
                   >
-                    <NavLink
-                      to="/seller/login"
+                    <Link
+                    href="/seller/login"
                       className="flex items-center py-3 px-2 rounded-lg transition-colors text-neutral-800 hover:bg-neutral-50"
                       onClick={onClose}
                     >
                       <Package size={18} className="mr-2" />
                       Seller Login
-                    </NavLink>
+                    </Link>
                   </motion.li>
                   <motion.li
                     custom={8}
                     variants={linkVariants}
                   >
-                    <NavLink
-                      to="/cart"
+                    <Link
+                      href="/cart"
                       className="flex items-center py-3 px-2 rounded-lg transition-colors text-neutral-800 hover:bg-neutral-50"
                       onClick={onClose}
                     >
                       <ShoppingCart size={18} className="mr-2" />
                       Cart
-                    </NavLink>
+                    </Link>
                   </motion.li>
                 </ul>
               </div>

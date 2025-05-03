@@ -31,7 +31,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/app/pages/auth/SellerLoginPage.jsx", "src/app/pages/auth/SellerSignupPage.jsx", "src/app/pages/auth/UserLoginPage.jsx", "src/app/pages/auth/UserSignupPage.jsx", "src/app/pages/BrowseProductsPage.jsx", "src/app/pages/CategoryPage.jsx", "src/app/pages/ContactPage.jsx", "src/app/pages/FeedbackPage.jsx", "src/app/pages/HomePage.jsx", "src/app/pages/NotFoundPage.jsx", "src/app/pages/ProductDetailsPage.jsx", "src/app/pages/ThankYouPage.jsx"  ],
   "exclude": [
     "node_modules"
   ]
