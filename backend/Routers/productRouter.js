@@ -85,4 +85,31 @@ router.get("/browse", (req, res) => {
     });
 });
 
+//createing browse by catagory
+
+router.get("/browse/category/:category",(req,res)=>{
+  const category = req.params.category;
+
+  Model.find({category:category}).then((result) => {
+      console.log("fetched catagory",catagory);
+      return res.status(200).json(result);
+  }).catch((err) => {
+    console.log("unable to fetch products",err);
+    return res.status(500).json({message:"Internal server error"});
+  });
+});
+
+//for dynamic catagories;
+
+router.get("/browse/categories", (req, res) => {
+  Model.distinct("category")
+    .then((categories) => {
+      res.status(200).json(categories);
+    })
+    .catch((err) => {
+      console.log("Error fetching categories:", err);
+      res.status(500).json({ message: "Failed to fetch categories" });
+    });
+});
+
 module.exports = router;
