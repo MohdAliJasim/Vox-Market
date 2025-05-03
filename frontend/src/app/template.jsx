@@ -1,6 +1,5 @@
 "use client";
 import { AppProvider } from "@/context/AppContext";
-import { SpeechProvider } from "../context/SpeechContext";
 import { SpeechProvider } from "@/context/SpeechContext";
 import {CartProvider} from "@/context/CartContext";
 import React from "react";
