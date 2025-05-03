@@ -3,10 +3,11 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const {requireAuth} = require("./middleware/authMiddleware");
 const UsrRout = require('./routers/userRouter');
-const SlrRout = require('./routers/SellerRouter');
-const PrdtRout = require('./routers/ProductRouter');
+const SlrRout = require('./routers/sellerRouter');
+const PrdtRout = require('./routers/productRouter');
 const orderRout = require('./Routers/orderRouter');
 const imageRout = require('./Routers/cloudinaryRouter');
+const reviewRout = require('./Routers/reviewRouter');
 
 
 
@@ -28,6 +29,7 @@ app.use('/s',SlrRout);
 app.use('/p',PrdtRout);
 app.use('/o',orderRout);
 app.use('/img',imageRout);
+app.use('/review',reviewRout);
 
 app.get('/test',(req,res)=>{
     res.send("test : Working")
