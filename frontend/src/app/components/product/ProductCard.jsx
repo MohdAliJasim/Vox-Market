@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom';
+
 import { Heart, Star, ShoppingCart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import  Button  from '@/app/ui/Button';
+import Link from 'next/link';
 
 
 
@@ -54,7 +55,7 @@ const ProductCard = ({
         </button>
 
         {/* Product image */}
-        <Link to={`/products/${id}`} className="relative overflow-hidden aspect-square">
+        <Link href={`/products/${id}`} className="relative overflow-hidden aspect-square">
           <img 
             src={image} 
             alt={title}
@@ -64,7 +65,7 @@ const ProductCard = ({
 
         {/* Product details */}
         <div className="p-4 flex flex-col flex-grow">
-          <Link to={`/products/${id}`}>
+          <Link href={`/products/${id}`}>
             <h3 className="font-medium text-neutral-800 hover:text-primary-500 transition-colors duration-200 line-clamp-2 mb-1">
               {title}
             </h3>

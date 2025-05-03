@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+
 import { Facebook, Instagram, Twitter, Package, Mail, MapPin, Phone } from 'lucide-react';
 
 const Footer = () => {
@@ -48,27 +49,27 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/products" className="text-neutral-400 hover:text-white transition-colors duration-200">
+                <Link href="/products" className="text-neutral-400 hover:text-white transition-colors duration-200">
                   All Products
                 </Link>
               </li>
               <li>
-                <Link to="/category/featured" className="text-neutral-400 hover:text-white transition-colors duration-200">
+                <Link href="/category/featured" className="text-neutral-400 hover:text-white transition-colors duration-200">
                   Featured Items
                 </Link>
               </li>
               <li>
-                <Link to="/category/bestsellers" className="text-neutral-400 hover:text-white transition-colors duration-200">
+                <Link href="/category/bestsellers" className="text-neutral-400 hover:text-white transition-colors duration-200">
                   Best Sellers
                 </Link>
               </li>
               <li>
-                <Link to="/category/new" className="text-neutral-400 hover:text-white transition-colors duration-200">
+                <Link href="/category/new" className="text-neutral-400 hover:text-white transition-colors duration-200">
                   New Arrivals
                 </Link>
               </li>
               <li>
-                <Link to="/category/deals" className="text-neutral-400 hover:text-white transition-colors duration-200">
+                <Link href="/category/deals" className="text-neutral-400 hover:text-white transition-colors duration-200">
                   Special Deals
                 </Link>
               </li>
@@ -80,27 +81,27 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Account</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/login" className="text-neutral-400 hover:text-white transition-colors duration-200">
+                <Link href="/login" className="text-neutral-400 hover:text-white transition-colors duration-200">
                   Customer Login
                 </Link>
               </li>
               <li>
-                <Link to="/signup" className="text-neutral-400 hover:text-white transition-colors duration-200">
+                <Link href="/signup" className="text-neutral-400 hover:text-white transition-colors duration-200">
                   Create Account
                 </Link>
               </li>
               <li>
-                <Link to="/seller/login" className="text-neutral-400 hover:text-white transition-colors duration-200">
+                <Link href="/seller/login" className="text-neutral-400 hover:text-white transition-colors duration-200">
                   Seller Login
                 </Link>
               </li>
               <li>
-                <Link to="/seller/signup" className="text-neutral-400 hover:text-white transition-colors duration-200">
+                <Link href="/seller/signup" className="text-neutral-400 hover:text-white transition-colors duration-200">
                   Become a Seller
                 </Link>
               </li>
               <li>
-                <Link to="/track-order" className="text-neutral-400 hover:text-white transition-colors duration-200">
+                <Link href="/track-order" className="text-neutral-400 hover:text-white transition-colors duration-200">
                   Track Order
                 </Link>
               </li>
@@ -135,16 +136,16 @@ const Footer = () => {
             &copy; {currentYear} Marketplace. All rights reserved.
           </p>
           <div className="flex flex-wrap justify-center space-x-4 text-sm text-neutral-500">
-            <Link to="/privacy-policy" className="hover:text-white transition-colors duration-200 mb-2 md:mb-0">
+            <Link href="/privacy-policy" className="hover:text-white transition-colors duration-200 mb-2 md:mb-0">
               Privacy Policy
             </Link>
-            <Link to="/terms-of-service" className="hover:text-white transition-colors duration-200 mb-2 md:mb-0">
+            <Link href="/terms-of-service" className="hover:text-white transition-colors duration-200 mb-2 md:mb-0">
               Terms of Service
             </Link>
-            <Link to="/refund-policy" className="hover:text-white transition-colors duration-200 mb-2 md:mb-0">
+            <Link href="/refund-policy" className="hover:text-white transition-colors duration-200 mb-2 md:mb-0">
               Refund Policy
             </Link>
-            <Link to="/contact" className="hover:text-white transition-colors duration-200 mb-2 md:mb-0">
+            <Link href="/contact" className="hover:text-white transition-colors duration-200 mb-2 md:mb-0">
               Contact Us
             </Link>
           </div>

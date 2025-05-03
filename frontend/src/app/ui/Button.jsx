@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+
 import { Loader2 } from 'lucide-react';
+import Link from 'next/link';
 
 
 
@@ -80,7 +81,7 @@ const Button = ({
   // If to provided, render as Link
   if (to) {
     return (
-      <Link to={to} className={allClasses} onClick={onClick}>
+      <Link href={to} className={allClasses} onClick={onClick}>
         {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         {!loading && icon && <span className="mr-2">{icon}</span>}
         {children}

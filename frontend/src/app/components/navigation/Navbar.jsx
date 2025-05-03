@@ -1,12 +1,16 @@
+'use client'
 import { useState, useEffect } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link'
 import { ShoppingCart, User, Menu, X, Search, Package } from 'lucide-react';
 
 
 const Navbar = ({ isMenuOpen, onMobileMenuToggle }) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const location = useLocation();
-  const isHomePage = location.pathname === '/';
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
+
+ 
 
   // Handle scroll events to change navbar appearance
   useEffect(() => {
@@ -18,27 +22,23 @@ const Navbar = ({ isMenuOpen, onMobileMenuToggle }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Determine navbar appearance based on scroll position and current page
+  // Navbar class based on scroll position
   const navbarClasses = `
     fixed top-0 left-0 right-0 z-50 transition-all duration-300
     ${isScrolled || !isHomePage ? 'bg-white shadow-md py-3' : 'bg-transparent py-5'}
   `;
 
-  // Link styles based on current scroll position and page
+  // Link styles based on scroll position
   const linkClasses = `
     font-medium transition-colors duration-200
     ${isScrolled || !isHomePage ? 'text-neutral-800 hover:text-primary-500' : 'text-white hover:text-primary-200'}
-  `;
-
-  const activeLinkClasses = `
-    ${isScrolled || !isHomePage ? 'text-primary-500' : 'text-primary-200'}
   `;
 
   return (
     <nav className={navbarClasses}>
       <div className="container-custom flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-center space-x-2">
+        <Link href="/" className="flex items-center space-x-2">
           <Package 
             size={32} 
             className={`${isScrolled || !isHomePage ? 'text-primary-500' : 'text-white'}`} 
@@ -46,41 +46,37 @@ const Navbar = ({ isMenuOpen, onMobileMenuToggle }) => {
           <span 
             className={`text-xl font-bold ${isScrolled || !isHomePage ? 'text-neutral-900' : 'text-white'}`}
           >
-            Marketplace
+            VoxMarket
           </span>
         </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-8">
-          <NavLink 
-            to="/products" 
-            className={({ isActive }) => 
-              `${linkClasses} ${isActive ? activeLinkClasses : ''}`
-            }
+          <Link
+            href="/browse-product" 
+            className={linkClasses}
           >
             Products
-          </NavLink>
+          </Link>
           <div className="group relative">
             <button className={linkClasses}>
               Categories
             </button>
             <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right">
               <div className="py-1" role="menu" aria-orientation="vertical">
-                <Link to="/category/electronics" className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100">Electronics</Link>
-                <Link to="/category/clothing" className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100">Clothing</Link>
-                <Link to="/category/home" className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100">Home & Garden</Link>
-                <Link to="/category/beauty" className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100">Beauty</Link>
+                <Link href="/category/electronics" className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100">Electronics</Link>
+                <Link href="/category/clothing" className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100">Clothing</Link>
+                <Link href="/category/home" className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100">Home & Garden</Link>
+                <Link href="/category/beauty" className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100">Beauty</Link>
               </div>
             </div>
           </div>
-          <NavLink 
-            to="/contact" 
-            className={({ isActive }) => 
-              `${linkClasses} ${isActive ? activeLinkClasses : ''}`
-            }
+          <Link 
+            href="/contact" 
+            className={linkClasses}
           >
             Contact
-          </NavLink>
+          </Link>
         </div>
 
         {/* Search and User Actions */}
@@ -95,7 +91,7 @@ const Navbar = ({ isMenuOpen, onMobileMenuToggle }) => {
           </div>
 
           <Link 
-            to="/login" 
+            href="/login" 
             className={`p-2 rounded-full ${isScrolled || !isHomePage ? 'hover:bg-neutral-100' : 'hover:bg-white/10'}`}
           >
             <User 
@@ -104,7 +100,7 @@ const Navbar = ({ isMenuOpen, onMobileMenuToggle }) => {
             />
           </Link>
           <Link 
-            to="/cart" 
+            href="/user/cart" 
             className={`p-2 rounded-full ${isScrolled || !isHomePage ? 'hover:bg-neutral-100' : 'hover:bg-white/10'}`}
           >
             <div className="relative">
