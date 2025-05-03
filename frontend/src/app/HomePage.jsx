@@ -8,8 +8,6 @@ import  SectionHeading  from '@/app/components/common/SectionHeading';
 import { categories } from '@/app/constants/categories';
 import { mockProducts } from '@/app/constants/mockProducts';
 import Link from 'next/link';
-import Footer from '@/app/components/navigation/Footer';
-import Navbar from './components/navigation/Navbar';
 
 const HomePage = () => {
   // Filter products
@@ -41,7 +39,6 @@ const HomePage = () => {
 
   return (
     <div className="page-transition">
-      <Navbar/>
       {/* Hero Section */}
       <section className="relative bg-primary-900 text-white">
         <div className="absolute inset-0 bg-gradient-to-r from-primary-900 to-primary-800 opacity-90"></div>
@@ -256,7 +253,6 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-      <Footer/>
     </div>
   );
 };

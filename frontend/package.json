@@ -30,6 +30,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@types/node": "22.15.3",
     "eslint": "^8",
     "eslint-config-next": "14.2.14",
     "postcss": "^8",

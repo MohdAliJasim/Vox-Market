@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useContext } from 'react'
-import { Button } from "@/components/ui/button"
+import  Button  from "@/app/ui/Button"
 import { Mic, MicOff } from 'lucide-react'
 import { SpeechContext } from '@/context/SpeechContext'
 

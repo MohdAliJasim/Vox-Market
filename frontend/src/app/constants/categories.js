@@ -1,0 +1,63 @@
+
+export const categories = [
+  {
+    id: 'electronics',
+    name: 'Electronics',
+    description: 'Latest gadgets and electronic devices.',
+    image: 'https://images.pexels.com/photos/356056/pexels-photo-356056.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    slug: 'electronics',
+    featured: true,
+  },
+  {
+    id: 'clothing',
+    name: 'Clothing',
+    description: 'Trendy fashion apparel and accessories.',
+    image: 'https://images.pexels.com/photos/934070/pexels-photo-934070.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    slug: 'clothing',
+    featured: true,
+  },
+  {
+    id: 'home',
+    name: 'Home & Garden',
+    description: 'Home decor and garden essentials.',
+    image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    slug: 'home',
+    featured: true,
+  },
+  {
+    id: 'beauty',
+    name: 'Beauty & Personal Care',
+    description: 'Skincare, makeup, and personal care products.',
+    image: 'https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    slug: 'beauty',
+    featured: true,
+  },
+  {
+    id: 'sports',
+    name: 'Sports & Outdoors',
+    description: 'Equipment and gear for sports and outdoor activities.',
+    image: 'https://images.pexels.com/photos/46798/the-ball-stadion-football-the-pitch-46798.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    slug: 'sports',
+  },
+  {
+    id: 'books',
+    name: 'Books & Media',
+    description: 'Books, movies, music, and other media products.',
+    image: 'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    slug: 'books',
+  },
+  {
+    id: 'toys',
+    name: 'Toys & Games',
+    description: 'Fun toys and games for all ages.',
+    image: 'https://images.pexels.com/photos/163036/mario-luigi-yoschi-figures-163036.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    slug: 'toys',
+  },
+  {
+    id: 'health',
+    name: 'Health & Wellness',
+    description: 'Products for your health and wellbeing.',
+    image: 'https://images.pexels.com/photos/3823/food-healthy-fruits-orange.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    slug: 'health',
+  },
+];

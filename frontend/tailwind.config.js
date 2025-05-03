@@ -9,6 +9,95 @@ module.exports = {
   theme: {
   	extend: {
   		colors: {
+			primary: {
+				50: '#EEF2FF',
+				100: '#D9E2FF',
+				200: '#B0C4FF',
+				300: '#85A5FF',
+				400: '#5B87FF',
+				500: '#3563E9', // primary color
+				600: '#2A51C9',
+				700: '#1F3E9D',
+				800: '#152C70',
+				900: '#0A1A43',
+			  },
+			  secondary: {
+				50: '#E6F4F1',
+				100: '#CCE8E3',
+				200: '#99D1C7',
+				300: '#66BAAB',
+				400: '#33A38F',
+				500: '#23856D', // secondary color
+				600: '#1C6958',
+				700: '#154E42',
+				800: '#0E342C',
+				900: '#071A16',
+			  },
+			  accent: {
+				50: '#FFF4E5',
+				100: '#FFE9CC',
+				200: '#FFD399',
+				300: '#FFBD66',
+				400: '#FFA733',
+				500: '#FF8B00', // accent color
+				600: '#CC7000',
+				700: '#995400',
+				800: '#663800',
+				900: '#331C00',
+			  },
+			  success: {
+				500: '#00C48C',
+			  },
+			  warning: {
+				500: '#FFBD00',
+			  },
+			  error: {
+				500: '#FF3B30',
+			  },
+			  neutral: {
+				50: '#F9FAFB',
+				100: '#F3F4F6',
+				200: '#E5E7EB',
+				300: '#D1D5DB',
+				400: '#9CA3AF',
+				500: '#6B7280',
+				600: '#4B5563',
+				700: '#374151',
+				800: '#1F2937',
+				900: '#111827',
+			  },
+			},
+			fontFamily: {
+			  sans: [
+				'"Inter"',
+				'system-ui',
+				'-apple-system',
+				'BlinkMacSystemFont',
+				'"Segoe UI"',
+				'Roboto',
+				'"Helvetica Neue"',
+				'Arial',
+				'sans-serif',
+			  ],
+			},
+			spacing: {
+			  '72': '18rem',
+			  '84': '21rem',
+			  '96': '24rem',
+			},
+			animation: {
+			  'fade-in': 'fadeIn 0.5s ease-in',
+			  'slide-up': 'slideUp 0.5s ease-out',
+			},
+			keyframes: {
+			  fadeIn: {
+				'0%': { opacity: '0' },
+				'100%': { opacity: '1' },
+			  },
+			  slideUp: {
+				'0%': { transform: 'translateY(20px)', opacity: '0' },
+				'100%': { transform: 'translateY(0)', opacity: '1' },
+			  },
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
