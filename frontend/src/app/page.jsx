@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, ShoppingBag, Shield, Truck, Award, Clock } from 'lucide-react';
 import  Button  from '@/app/ui/Button';
@@ -10,8 +10,19 @@ import { mockProducts } from '@/app/constants/mockProducts';
 import Link from 'next/link';
 import Footer from '@/app/components/navigation/Footer';
 import Navbar from './components/navigation/Navbar';
+import MobileMenu from './components/navigation/MobileMenu';
 
 const HomePage = () => {
+
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+
+  useEffect(() => {
+    // Close mobile menu on route change
+    setIsMobileMenuOpen(false);
+    // Scroll to top on route change
+    window.scrollTo(0, 0);
+  }, []);
   // Filter products
   const featuredProducts = mockProducts.filter(product => product.featured).slice(0, 4);
   const newArrivals = mockProducts.filter(product => product.isNew).slice(0, 4);
@@ -41,7 +52,8 @@ const HomePage = () => {
 
   return (
     <div className="page-transition">
-      <Navbar/>
+      <Navbar onMobileMenuToggle={setIsMobileMenuOpen} isMenuOpen={isMobileMenuOpen} />
+      <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
       {/* Hero Section */}
       <section className="relative bg-primary-900 text-white">
         <div className="absolute inset-0 bg-gradient-to-r from-primary-900 to-primary-800 opacity-90"></div>

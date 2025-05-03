@@ -1,22 +1,28 @@
 'use client';
+import Link from 'next/link';
+
 import { useState } from 'react';
 
 import { motion } from 'framer-motion';
 import {
   Package,
-  LayoutDashboard,
-  Users,
+  User,
   ShoppingBag,
   Settings,
   LogOut,
   Menu,
   X,
-  Bell,
-  Search,
+  Home,
+  Plus,
+  List,
+  ShoppingCart,
+  Clock,
+  Users,
 } from 'lucide-react';
-import Link from 'next/link';
 
-const AdminLayout= () => {
+
+
+const DashboardLayout= ({ type }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
@@ -28,11 +34,21 @@ const AdminLayout= () => {
     setIsMobileSidebarOpen(!isMobileSidebarOpen);
   };
 
-  const navItems = [
-    { href: '/admin', icon: LayoutDashboard, label: 'Overview' },
-    { href: '/admin/users', icon: Users, label: 'Manage Users' },
-    { href: '/admin/products', icon: ShoppingBag, label: 'Manage Products' },
+  const userNavItems = [
+    { href: '/dashboard', icon: Home, label: 'Dashboard' },
+    { href: '/dashboard/profile', icon: User, label: 'Profile' },
+    { href: '/dashboard/orders', icon: ShoppingBag, label: 'Orders' },
   ];
+
+  const sellerNavItems = [
+    { href: '/seller/dashboard', icon: Home, label: 'Dashboard' },
+    { href: '/seller/dashboard/products/add', icon: Plus, label: 'Add Product' },
+    { href: '/seller/dashboard/products', icon: List, label: 'Manage Products' },
+    { href: '/seller/dashboard/orders', icon: ShoppingCart, label: 'Orders' },
+    { href: '/seller/dashboard/profile', icon: User, label: 'Profile' },
+  ];
+
+  const navItems = type === 'user' ? userNavItems : sellerNavItems;
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -66,7 +82,7 @@ const AdminLayout= () => {
           <Link href="/" className="flex items-center space-x-3">
             <Package size={32} className="text-primary-500" />
             {isSidebarOpen && (
-              <span className="text-xl font-bold">Admin Panel</span>
+              <span className="text-xl font-bold">Marketplace</span>
             )}
           </Link>
           <button
@@ -84,7 +100,7 @@ const AdminLayout= () => {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  end={item.href === '/admin'}
+                  end={item.href === '/dashboard' || item.href === '/seller/dashboard'}
                   className={({ isActive }) =>
                     `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors
                     ${
@@ -105,7 +121,7 @@ const AdminLayout= () => {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/admin/settings"
+                  href="/settings"
                   className="flex items-center space-x-3 px-4 py-3 rounded-lg text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 transition-colors"
                 >
                   <Settings size={20} />
@@ -128,49 +144,17 @@ const AdminLayout= () => {
         className={`min-h-screen transition-all duration-300 
           ${isSidebarOpen ? 'lg:pl-64' : 'lg:pl-20'}`}
       >
-        {/* Top Bar */}
-        <header className="h-16 bg-white border-b border-neutral-200 flex items-center justify-between px-8">
-          <div className="flex-1 max-w-xl">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search..."
-                className="w-full pl-10 pr-4 py-2 rounded-lg border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-500"
-              />
-              <Search
-                size={18}
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400"
-              />
-            </div>
-          </div>
-          <div className="flex items-center space-x-4">
-            <button className="relative p-2 rounded-lg hover:bg-neutral-100">
-              <Bell size={20} className="text-neutral-600" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-primary-500 rounded-full"></span>
-            </button>
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full bg-neutral-200"></div>
-              {isSidebarOpen && (
-                <div>
-                  <p className="text-sm font-medium">Admin User</p>
-                  <p className="text-xs text-neutral-500">admin@example.com</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </header>
-
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
           className="p-8"
         >
- 
+       
         </motion.div>
       </main>
     </div>
   );
 }
 
-export default AdminLayout;
+export default DashboardLayout;
