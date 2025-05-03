@@ -55,7 +55,7 @@ const ProductCard = ({
         </button>
 
         {/* Product image */}
-        <Link href={`/products/${id}`} className="relative overflow-hidden aspect-square">
+        <Link href={`/product-details/${id}`} className="relative overflow-hidden aspect-square">
           <img 
             src={image} 
             alt={title}
@@ -65,7 +65,7 @@ const ProductCard = ({
 
         {/* Product details */}
         <div className="p-4 flex flex-col flex-grow">
-          <Link href={`/products/${id}`}>
+          <Link href={`/product-details/${id}`}>
             <h3 className="font-medium text-neutral-800 hover:text-primary-500 transition-colors duration-200 line-clamp-2 mb-1">
               {title}
             </h3>
