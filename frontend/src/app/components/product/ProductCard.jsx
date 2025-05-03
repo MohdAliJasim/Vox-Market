@@ -1,27 +1,28 @@
-
+'use client'
 import { Heart, Star, ShoppingCart } from 'lucide-react';
 import { motion } from 'framer-motion';
-import  Button  from '@/app/ui/Button';
+import Button from '@/app/ui/Button';
 import Link from 'next/link';
-
-
 
 const ProductCard = ({
   id,
   title,
   price,
-  originalPrice,
   image,
-  rating,
-  reviewCount,
-  isFeatured = false,
-  isNew = false,
-  isSale = false,
+  description,
+  category,
+  stock,
+  createdAt,
+  seller
 }) => {
-  // Calculate discount percentage if original price exists
-  const discountPercentage = originalPrice 
-    ? Math.round(((originalPrice - price) / originalPrice) * 100) 
-    : 0;
+  // Calculate if product is new (less than 7 days old)
+  const isNew = createdAt 
+    ? new Date(createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+    : false;
+
+  // For demo purposes - you might want to get these from your API
+  const rating = 4; // Default rating if not provided
+  const reviewCount = 12; // Default review count if not provided
 
   return (
     <motion.div 
@@ -37,14 +38,9 @@ const ProductCard = ({
               New
             </span>
           )}
-          {isSale && (
-            <span className="bg-accent-500 text-white text-xs font-medium px-2.5 py-1 rounded">
-              Sale {discountPercentage}% Off
-            </span>
-          )}
-          {isFeatured && (
-            <span className="bg-secondary-500 text-white text-xs font-medium px-2.5 py-1 rounded">
-              Featured
+          {stock <= 0 && (
+            <span className="bg-red-500 text-white text-xs font-medium px-2.5 py-1 rounded">
+              Out of Stock
             </span>
           )}
         </div>
@@ -71,17 +67,24 @@ const ProductCard = ({
             </h3>
           </Link>
 
+          {/* Category */}
+          {category && (
+            <p className="text-xs text-neutral-500 mb-1">{category}</p>
+          )}
+
           {/* Product price */}
           <div className="flex items-center mb-2 mt-1">
             <span className="font-semibold text-neutral-900">${price.toFixed(2)}</span>
-            {originalPrice && (
-              <span className="text-neutral-500 text-sm line-through ml-2">
-                ${originalPrice.toFixed(2)}
-              </span>
-            )}
           </div>
 
-          {/* Product rating */}
+          {/* Stock status */}
+          <p className={`text-xs mb-2 ${
+            stock > 0 ? 'text-green-600' : 'text-red-600'
+          }`}>
+            {stock > 0 ? `${stock} in stock` : 'Out of stock'}
+          </p>
+
+          {/* Product rating - using defaults for now */}
           <div className="flex items-center mb-3">
             <div className="flex items-center">
               {[...Array(5)].map((_, i) => (
@@ -104,12 +107,13 @@ const ProductCard = ({
           {/* Add to cart button */}
           <div className="mt-auto">
             <Button 
-              variant="primary" 
+              variant={stock > 0 ? "primary" : "outline"} 
               size="sm" 
               fullWidth 
               icon={<ShoppingCart size={16} />}
+              disabled={stock <= 0}
             >
-              Add to Cart
+              {stock > 0 ? 'Add to Cart' : 'Out of Stock'}
             </Button>
           </div>
         </div>

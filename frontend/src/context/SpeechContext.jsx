@@ -9,12 +9,14 @@ const SpeechContext = createContext();
 const SpeechProvider = ({ children }) => {
   const [command, setCommand] = useState("");
   const [triggerLogin, setTriggerLogin] = useState(false);
+  const [liveTranscript, setLiveTranscript] = useState("");
   const router = useRouter();
 
   const commands = [
     {
       command: "*",
       callback: (transcript) => {
+        setLiveTranscript(transcript); 
         if (transcript.toLowerCase().includes("home")) {
           console.log("home command detected");
           window.location.href = "/";
@@ -58,6 +60,7 @@ const SpeechProvider = ({ children }) => {
   useEffect(() => {
     if (transcript) {
       setCommand(transcript);
+      setLiveTranscript(transcript);
     }
   }, [transcript]);
 
@@ -80,7 +83,8 @@ const SpeechProvider = ({ children }) => {
   };
 
   return (
-    <SpeechContext.Provider value={{ command:"click *", startListening, stopListening, triggerLogin, setTriggerLogin }}>
+    <SpeechContext.Provider value={{ command:"click *", startListening, stopListening, triggerLogin, setTriggerLogin, liveTranscript, 
+      listening  }}>
       {children}
     </SpeechContext.Provider>
   );

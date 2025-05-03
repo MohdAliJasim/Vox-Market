@@ -1,68 +1,140 @@
-
 'use client';
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Heart, Share2, ShoppingCart, Check, ChevronRight, Truck, Shield, RotateCcw } from 'lucide-react';
-
 import ProductCard from '@/app/components/product/ProductCard';
 import Button from '@/app/ui/Button';
-import { mockProducts } from '@/app/constants/mockProducts';
-import { categories } from '@/app/constants/categories';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 const ProductDetailsPage = () => {
-
   const { id } = useParams();
-  // Find the product
-  const product = mockProducts.find(p => p.id === id);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [selectedImage, setSelectedImage] = useState('');
+  const [quantity, setQuantity] = useState(1);
+  const [specifications, setSpecifications] = useState({});
+
+  // Fetch product data
+  useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // First fetch the product details
+        const productResponse = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/p/getbyid/${id}`);
+        
+        if (!productResponse.data) {
+          throw new Error('Product not found');
+        }
+        
+        setProduct(productResponse.data);
+        setSelectedImage(productResponse.data.imageUrl);
+        
+        // Parse specifications if they exist
+        if (productResponse.data.specifications) {
+          try {
+            const specs = typeof productResponse.data.specifications === 'string' 
+              ? JSON.parse(productResponse.data.specifications)
+              : productResponse.data.specifications;
+            setSpecifications(specs);
+          } catch (e) {
+            console.error('Error parsing specifications:', e);
+          }
+        }
+        
+        // Then fetch related products
+        try {
+          if (productResponse.data.category) {
+            const relatedResponse = await axios.get(
+              `${process.env.NEXT_PUBLIC_API_URL}/p/browse/category/${encodeURIComponent(productResponse.data.category)}`
+            );
+            setRelatedProducts(
+              relatedResponse.data
+                .filter(p => p._id !== productResponse.data._id)
+                .slice(0, 4)
+            );
+          }
+        } catch (relatedError) {
+          console.error('Error fetching related products:', relatedError);
+          setRelatedProducts([]);
+        }
+      } catch (err) {
+        console.error('Error fetching product:', err);
+        setError(err.response?.data?.message || err.message || 'Failed to load product');
+        toast.error('Failed to load product details');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductData();
+  }, [id]);
+
+  const handleQuantityChange = (value) => {
+    if (value >= 1 && value <= (product?.stock || 1)) {
+      setQuantity(value);
+    }
+  };
   
-  // If product not found, show error
-  if (!product) {
+
+  const decrementQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  const incrementQuantity = () => {
+    if (product && quantity < product.stock) {
+      setQuantity(quantity + 1);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="container-custom py-20 text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500 mx-auto mb-4"></div>
+        <p>Loading product details...</p>
+      </div>
+    );
+  }
+
+  if (error || !product) {
     return (
       <div className="container-custom py-20 text-center">
         <h1 className="text-2xl font-bold mb-4">Product Not Found</h1>
-        <p className="mb-8">We couldn't find the product you're looking for.</p>
+        <p className="mb-8">{error || 'We couldn\'t find the product you\'re looking for.'}</p>
         <Button href="/browse-product" variant="primary">
           Browse Products
         </Button>
       </div>
     );
   }
+
+
   
-  // Find the category
-  const category = categories.find(c => c.id === product.categoryId);
+  // Debugging logs (remove in production)
+  console.log('Product data:', product);
+  console.log('Related products:', relatedProducts);
+
+  // Calculate if product is new (less than 7 days old)
+  const isNew = product.createdAt 
+    ? new Date(product.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+    : false;
+
   
-  // State for selected image
-  const [selectedImage, setSelectedImage] = useState(product.image);
+
+  // For demo purposes - you might want to get these from your API
+  const rating = 4; // Default rating if not provided
+  const reviewCount = 12; // Default review count if not provided
+
+
   
-  // State for quantity
-  const [quantity, setQuantity] = useState(1);
-  
-  // Get related products (same category, excluding current product)
-  const relatedProducts = mockProducts
-    .filter(p => p.categoryId === product.categoryId && p.id !== product.id)
-    .slice(0, 4);
-  
-  // Handle quantity change
-  const handleQuantityChange = (value) => {
-    if (value >= 1 && value <= product.stock) {
-      setQuantity(value);
-    }
-  };
-  
-  const decrementQuantity = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
-  };
-  
-  const incrementQuantity = () => {
-    if (quantity < product.stock) {
-      setQuantity(quantity + 1);
-    }
-  };
 
   return (
     <div className="page-transition">
@@ -73,16 +145,19 @@ const ProductDetailsPage = () => {
             <Link href="/" className="text-neutral-500 hover:text-primary-500">Home</Link>
             <ChevronRight size={16} className="mx-2 text-neutral-400" />
             <Link href="/browse-product" className="text-neutral-500 hover:text-primary-500">Products</Link>
-            {category && (
+            {product.category && (
               <>
                 <ChevronRight size={16} className="mx-2 text-neutral-400" />
-                <Link href={`/category/${category.id}`} className="text-neutral-500 hover:text-primary-500">
-                  {category.name}
+                <Link 
+                  href={`/category/${product.category}`} 
+                  className="text-neutral-500 hover:text-primary-500"
+                >
+                  {product.category}
                 </Link>
               </>
             )}
             <ChevronRight size={16} className="mx-2 text-neutral-400" />
-            <span className="text-neutral-900 font-medium">{product.title}</span>
+            <span className="text-neutral-900 font-medium">{product.name}</span>
           </nav>
         </div>
       </section>
@@ -102,12 +177,13 @@ const ProductDetailsPage = () => {
                 >
                   <img 
                     src={selectedImage} 
-                    alt={product.title}
+                    alt={product.name}
                     className="w-full h-full object-cover"
                   />
                 </motion.div>
                 
-                {product.images && product.images.length > 1 && (
+                {/* If you have multiple images, you can display them here */}
+                {/* {product.images && product.images.length > 1 && (
                   <div className="grid grid-cols-5 gap-2">
                     {product.images.map((image, index) => (
                       <button
@@ -119,43 +195,38 @@ const ProductDetailsPage = () => {
                       >
                         <img 
                           src={image} 
-                          alt={`${product.title} - View ${index + 1}`}
+                          alt={`${product.name} - View ${index + 1}`}
                           className="w-full h-full object-cover"
                         />
                       </button>
                     ))}
                   </div>
-                )}
+                )} */}
               </div>
               
               {/* Product Info */}
               <div className="lg:col-span-2">
                 {/* Product badges */}
                 <div className="flex flex-wrap gap-2 mb-3">
-                  {product.isNew && (
+                  {isNew && (
                     <span className="bg-primary-500 text-white text-xs font-medium px-2.5 py-0.5 rounded">
                       New
                     </span>
                   )}
-                  {product.isSale && product.originalPrice && (
-                    <span className="bg-accent-500 text-white text-xs font-medium px-2.5 py-0.5 rounded">
-                      Sale {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% Off
-                    </span>
-                  )}
-                  {product.featured && (
-                    <span className="bg-secondary-500 text-white text-xs font-medium px-2.5 py-0.5 rounded">
-                      Featured
-                    </span>
-                  )}
-                  {product.stock < 10 && (
+                  {product.stock < 10 && product.stock > 0 && (
                     <span className="bg-error-500 text-white text-xs font-medium px-2.5 py-0.5 rounded">
                       Low Stock
+                    </span>
+                  )}
+                  {product.stock <= 0 && (
+                    <span className="bg-error-500 text-white text-xs font-medium px-2.5 py-0.5 rounded">
+                      Out of Stock
                     </span>
                   )}
                 </div>
                 
                 {/* Product title and rating */}
-                <h1 className="text-2xl md:text-3xl font-bold text-neutral-900 mb-2">{product.title}</h1>
+                <h1 className="text-2xl md:text-3xl font-bold text-neutral-900 mb-2">{product.name}</h1>
                 
                 <div className="flex items-center mb-4">
                   <div className="flex items-center">
@@ -164,7 +235,7 @@ const ProductDetailsPage = () => {
                         key={i}
                         size={18}
                         className={`${
-                          i < Math.floor(product.rating) 
+                          i < Math.floor(rating) 
                             ? 'text-amber-400 fill-amber-400' 
                             : 'text-neutral-300'
                         }`}
@@ -172,18 +243,13 @@ const ProductDetailsPage = () => {
                     ))}
                   </div>
                   <span className="text-sm text-neutral-600 ml-2">
-                    {product.rating.toFixed(1)} ({product.reviewCount} reviews)
+                    {rating.toFixed(1)} ({reviewCount} reviews)
                   </span>
                 </div>
                 
                 {/* Product price */}
                 <div className="flex items-baseline mb-6">
                   <span className="text-3xl font-bold text-neutral-900">${product.price.toFixed(2)}</span>
-                  {product.originalPrice && (
-                    <span className="text-lg text-neutral-500 line-through ml-2">
-                      ${product.originalPrice.toFixed(2)}
-                    </span>
-                  )}
                 </div>
                 
                 {/* Product description */}
@@ -200,33 +266,35 @@ const ProductDetailsPage = () => {
                   </div>
                   
                   {/* Quantity selector */}
-                  <div className="flex items-center mb-4">
-                    <span className="text-neutral-700 mr-4">Quantity:</span>
-                    <div className="flex items-center border border-neutral-300 rounded-lg">
-                      <button 
-                        onClick={decrementQuantity}
-                        disabled={quantity <= 1}
-                        className="px-3 py-2 text-neutral-500 hover:text-neutral-700 disabled:opacity-50"
-                      >
-                        -
-                      </button>
-                      <input
-                        type="number"
-                        min="1"
-                        max={product.stock}
-                        value={quantity}
-                        onChange={(e) => handleQuantityChange(parseInt(e.target.value))}
-                        className="w-12 text-center border-x border-neutral-300 py-2 focus:outline-none"
-                      />
-                      <button 
-                        onClick={incrementQuantity}
-                        disabled={quantity >= product.stock}
-                        className="px-3 py-2 text-neutral-500 hover:text-neutral-700 disabled:opacity-50"
-                      >
-                        +
-                      </button>
+                  {product.stock > 0 && (
+                    <div className="flex items-center mb-4">
+                      <span className="text-neutral-700 mr-4">Quantity:</span>
+                      <div className="flex items-center border border-neutral-300 rounded-lg">
+                        <button 
+                          onClick={decrementQuantity}
+                          disabled={quantity <= 1}
+                          className="px-3 py-2 text-neutral-500 hover:text-neutral-700 disabled:opacity-50"
+                        >
+                          -
+                        </button>
+                        <input
+                          type="number"
+                          min="1"
+                          max={product.stock}
+                          value={quantity}
+                          onChange={(e) => handleQuantityChange(parseInt(e.target.value))}
+                          className="w-12 text-center border-x border-neutral-300 py-2 focus:outline-none"
+                        />
+                        <button 
+                          onClick={incrementQuantity}
+                          disabled={quantity >= product.stock}
+                          className="px-3 py-2 text-neutral-500 hover:text-neutral-700 disabled:opacity-50"
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  )}
                   
                   {/* Action buttons */}
                   <div className="flex flex-col sm:flex-row gap-3">
@@ -316,8 +384,8 @@ const ProductDetailsPage = () => {
         </div>
       </section>
 
-      {/* Product Specifications */}
-      {product.specifications && Object.keys(product.specifications).length > 0 && (
+   {/* Product Specifications */}
+   {Object.keys(specifications).length > 0 && (
         <section className="py-12 bg-white">
           <div className="container-custom">
             <h2 className="text-2xl font-bold mb-6">Specifications</h2>
@@ -325,7 +393,7 @@ const ProductDetailsPage = () => {
             <div className="bg-neutral-50 rounded-xl overflow-hidden">
               <table className="w-full table-auto">
                 <tbody>
-                  {Object.entries(product.specifications).map(([key, value], index) => (
+                  {Object.entries(specifications).map(([key, value], index) => (
                     <tr 
                       key={index} 
                       className={index % 2 === 0 ? 'bg-white' : 'bg-neutral-50'}
@@ -349,22 +417,20 @@ const ProductDetailsPage = () => {
       {relatedProducts.length > 0 && (
         <section className="py-12 bg-neutral-50">
           <div className="container-custom">
-            <h2 className="text-2xl font-bold mb-6">Related Products</h2>
+            <h2 className="text-2xl font-bold mb-6">You May Also Like</h2>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts.map((relatedProduct) => (
                 <ProductCard 
-                  key={relatedProduct.id}
-                  id={relatedProduct.id}
-                  title={relatedProduct.title}
+                  key={relatedProduct._id}
+                  id={relatedProduct._id}
+                  title={relatedProduct.name}
                   price={relatedProduct.price}
-                  originalPrice={relatedProduct.originalPrice}
-                  image={relatedProduct.image}
-                  rating={relatedProduct.rating}
-                  reviewCount={relatedProduct.reviewCount}
-                  isFeatured={relatedProduct.featured}
-                  isNew={relatedProduct.isNew}
-                  isSale={relatedProduct.isSale}
+                  image={relatedProduct.imageUrl}
+                  description={relatedProduct.description}
+                  category={relatedProduct.category}
+                  stock={relatedProduct.stock}
+                  createdAt={relatedProduct.createdAt}
                 />
               ))}
             </div>

@@ -72,10 +72,10 @@ const HomePage = () => {
               Your ultimate marketplace for quality and convenience.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Button to="/products" variant="accent" size="lg">
+              <Button to="/browse-product" variant="accent" size="lg">
                 Shop Now
               </Button>
-              <Button to="/seller/signup" variant="outline" size="lg" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+              <Button to="/seller-signup" variant="outline" size="lg" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
                 Become a Seller
               </Button>
             </div>
@@ -161,7 +161,7 @@ const HomePage = () => {
           </motion.div>
           
           <div className="text-center mt-10">
-            <Button to="/products" variant="primary" className="px-6" icon={<ShoppingBag size={16} />}>
+            <Button to="/browse-product" variant="primary" className="px-6" icon={<ShoppingBag size={16} />}>
               View All Products
             </Button>
           </div>
@@ -202,7 +202,7 @@ const HomePage = () => {
           </motion.div>
           
           <div className="text-center mt-10">
-            <Button to="/products?filter=new" variant="outline" className="px-6" icon={<Clock size={16} />}>
+            <Button to="/browse-product?filter=new" variant="outline" className="px-6" icon={<Clock size={16} />}>
               View All New Arrivals
             </Button>
           </div>
@@ -218,7 +218,7 @@ const HomePage = () => {
               Join thousands of sellers who have already started their journey.
               It's free to sign up and only takes a few minutes to get your shop up and running.
             </p>
-            <Button to="/seller/signup" variant="accent" size="lg" className="px-8">
+            <Button to="/seller-signup" variant="accent" size="lg" className="px-8">
               Become a Seller Today
             </Button>
           </div>
