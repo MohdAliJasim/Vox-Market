@@ -28,7 +28,7 @@ router.get("/getall",verifyToken, (req, res) => {
   });
 });
 
-router.get("/getbyid/:id", (req, res) => {
+router.get("/getbyid/:id",(req, res) => {
   Model.findById(req.params.id)
     .then((result) => {
       res.status(200).json(result);
@@ -68,6 +68,47 @@ router.put("/updatebyid/:id", (req, res) => {
     .catch((err) => {
       console.log(err);
       res.status(500).json(err);
+    });
+});
+//above are seller specific routes...
+//below routes dont need the middleware and are dor public ...
+// Get all products (for browsing)
+router.get("/browse", (req, res) => {
+  Model.find()
+    .populate("seller", "name businessName ratings") // Optional: populate seller info
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log("Browse Error:", err);
+      res.status(500).json({ error: "Failed to fetch products" });
+    });
+});
+
+//createing browse by catagory
+
+router.get("/browse/category/:category",(req,res)=>{
+  const category = req.params.category;
+
+  Model.find({category:category}).then((result) => {
+      console.log("fetched catagory",catagory);
+      return res.status(200).json(result);
+  }).catch((err) => {
+    console.log("unable to fetch products",err);
+    return res.status(500).json({message:"Internal server error"});
+  });
+});
+
+//for dynamic catagories;
+
+router.get("/browse/categories", (req, res) => {
+  Model.distinct("category")
+    .then((categories) => {
+      res.status(200).json(categories);
+    })
+    .catch((err) => {
+      console.log("Error fetching categories:", err);
+      res.status(500).json({ message: "Failed to fetch categories" });
     });
 });
 
