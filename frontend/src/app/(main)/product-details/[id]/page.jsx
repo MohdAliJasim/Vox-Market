@@ -76,6 +76,28 @@ const ProductDetailsPage = () => {
     fetchProductData();
   }, [id]);
 
+
+  const handleAddToCart = async () => {
+    try {
+      const cartItem = {
+        productid: product._id,
+        quantity,
+        price: product.price,
+        name: product.name,
+        image: product.imageUrl,
+      };
+
+      console.log(cartItem);
+      // Save to localStorage or send to backend
+      const existing = JSON.parse(localStorage.getItem('Cart') || '[]');
+      console.log(existing);
+      localStorage.setItem('Cart', JSON.stringify([...existing, cartItem]));
+      toast.success('Added to cart');
+    } catch (err) {
+      toast.error('Failed to add to cart');
+    }
+  };
+
   const handleQuantityChange = (value) => {
     if (value >= 1 && value <= (product?.stock || 1)) {
       setQuantity(value);
@@ -299,6 +321,7 @@ const ProductDetailsPage = () => {
                   {/* Action buttons */}
                   <div className="flex flex-col sm:flex-row gap-3">
                     <Button 
+                      onClick={handleAddToCart}
                       variant="primary" 
                       size="lg" 
                       fullWidth

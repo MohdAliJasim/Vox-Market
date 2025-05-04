@@ -19,7 +19,7 @@ router.post("/addreview",requireAuth,(req,res)=>{
     });
 });
 
-router.get("/getall/:productId",(req,res)=>{
+router.get("review/getbyid/:productId",(req,res)=>{
     Model.find({productId:req.params.productId}).populate("userId","name")
     .sort({createdAt:-1})
     .then((result) => {
