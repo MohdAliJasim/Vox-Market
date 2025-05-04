@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from "react";
 import React from "react";
-import Footer from "../components/navigation/Footer";
+
 import Navbar from '@/app/components/navigation/Navbar';
 import MobileMenu from '@/app/components/navigation/MobileMenu';
 
@@ -20,10 +20,10 @@ const Layout = ({ children }) => {
     }, []);
   return (
     <>
-      {/* <Navbar onMobileMenuToggle={setIsMobileMenuOpen} isMenuOpen={isMobileMenuOpen} />
-      <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} /> */}
+      <Navbar onMobileMenuToggle={setIsMobileMenuOpen} isMenuOpen={isMobileMenuOpen} transparentHeader/>
+      <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
       {children}
-      <Footer/>   
+       
    
     </>
   );

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Eye, Package, Truck, CheckCircle, Clock } from 'lucide-react';
 import Button from '@/app/ui/Button';
+import SellerLayout from '../SellerLayout';
 
 // Mock orders data
 const mockOrders = [
@@ -109,6 +110,7 @@ const ManageOrdersPage = () => {
   };
 
   return (
+    <SellerLayout>
     <div className="container-custom py-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -217,6 +219,7 @@ const ManageOrdersPage = () => {
         </div>
       </motion.div>
     </div>
+    </SellerLayout>
   );
 };
 

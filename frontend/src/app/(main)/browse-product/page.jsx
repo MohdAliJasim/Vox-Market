@@ -12,9 +12,12 @@ import {
 import ProductCard from "@/app/components/product/ProductCard";
 import Button from "@/app/ui/Button";
 import axios from "axios";
+import Navbar from '@/app/components/navigation/Navbar';
+import MobileMenu from '@/app/components/navigation/MobileMenu';
 import { toast } from "react-hot-toast";
 
 const BrowseProductsPage = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [products, setProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]); // Store all products from API
   const [viewMode, setViewMode] = useState("grid");
@@ -29,6 +32,12 @@ const BrowseProductsPage = () => {
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState([]); // Store categories from API
+  useEffect(() => {
+    // Close mobile menu on route change
+    setIsMobileMenuOpen(false);
+    // Scroll to top on route change
+    window.scrollTo(0, 0);
+  }, []);
 
   // Fetch products and categories from API
   useEffect(() => {
@@ -166,11 +175,15 @@ const BrowseProductsPage = () => {
       </div>
     );
   }
-
+    
+    
+     
   return (
     <div className="page-transition">
+      <Navbar onMobileMenuToggle={setIsMobileMenuOpen} isMenuOpen={isMobileMenuOpen} />
+      <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
        {/* Products Header */}
-      <section className="bg-white border-b border-neutral-200">
+      <section className="bg-white border-b border-neutral-200 mt-16">
         <div className="container-custom py-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
             <div>

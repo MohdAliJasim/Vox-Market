@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { User, Mail, Phone, MapPin, Camera, Save, Building, Globe } from 'lucide-react';
 import Button from '@/app/ui/Button';
 import FormField from '@/app/components/forms/FormField';
+import SellerLayout from '../SellerLayout';
 
 const SellerProfilePage = () => {
   const [formData, setFormData] = useState({
@@ -32,6 +33,7 @@ const SellerProfilePage = () => {
   };
 
   return (
+    <SellerLayout>
     <div className="container-custom py-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -161,6 +163,7 @@ const SellerProfilePage = () => {
         </div>
       </motion.div>
     </div>
+    </SellerLayout>
   );
 };
 

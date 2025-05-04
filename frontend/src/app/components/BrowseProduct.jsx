@@ -62,7 +62,7 @@ export default function BrowseProducts() {
   const categories = ['All', ...new Set(products.map(product => product.category))]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-gray-100 font-sans">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-gray-100 font-sans ">
       <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-bold mb-8 bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent text-center">
           Explore Our Cosmic Collection

@@ -1,9 +1,11 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail, MessageSquare } from 'lucide-react';
 import Button from '@/app/ui/Button';
 import FormField from '@/app/components/forms/FormField';
+import Navbar from '@/app/components/navigation/Navbar';
+import MobileMenu from '@/app/components/navigation/MobileMenu';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -73,9 +75,19 @@ const ContactPage = () => {
       console.log('Form submitted', formData);
     }, 1500);
   };
-
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    
+    
+      useEffect(() => {
+        // Close mobile menu on route change
+        setIsMobileMenuOpen(false);
+        // Scroll to top on route change
+        window.scrollTo(0, 0);
+      }, []);
   return (
     <div className="page-transition">
+      <Navbar onMobileMenuToggle={setIsMobileMenuOpen} isMenuOpen={isMobileMenuOpen} transparentHeader/>
+      <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} /> 
       {/* Hero Section */}
       <section className="relative bg-primary-900 text-white">
         <div className="absolute inset-0 bg-gradient-to-r from-primary-900 to-primary-800 opacity-90"></div>
