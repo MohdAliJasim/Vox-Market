@@ -4,7 +4,7 @@ import { useCart } from '@/context/CartContext';
 
 const Cart = () => {
   const { cartitems, removeFromCart, updateQuantity, clearCart } = useCart();
- 
+  
   const handleQuantityChange = (productId, e) => {
     const qty = parseInt(e.target.value);
     updateQuantity(productId, qty);

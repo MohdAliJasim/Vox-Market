@@ -6,21 +6,7 @@ import { createContext,useContext,useEffect,useState } from "react"
 const CartContext = createContext();
 
 export const CartProvider =({children}) =>{
-    const [cartitems,setcartitems]=useState([
-        {
-          "productid": "123",
-          "name": "Wireless Mouse",
-          "price": 499,
-          "quantity": 2
-        },
-        {
-          "productid": "456",
-          "name": "Gaming Keyboard",
-          "price": 1599,
-          "quantity": 1
-        }
-      
-      ]);
+    const [cartitems,setcartitems]=useState([]);
 
     useEffect(()=>{
         const storedItems = localStorage.getItem('Cart');
