@@ -10,7 +10,9 @@ import {
   Search,
   Package,
   ChevronDown,
+  Store,
 } from "lucide-react";
+import useAppContext from "@/context/AppContext";
 
 const Navbar = ({
   isMenuOpen,
@@ -21,6 +23,12 @@ const Navbar = ({
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === "/";
+  const { user, seller, userLogout, sellerLogout } = useAppContext();
+  
+
+    
+    console.log('Navbar auth state:', { user, seller });
+  
 
   // Handle scroll events to change navbar appearance
   useEffect(() => {
@@ -135,16 +143,33 @@ const Navbar = ({
             />
           </div>
 
-          <Link
-            href="/seller-login"
-            className={`px-4 py-2 rounded-lg border ${
-              shouldUseTransparentStyle
-                ? "border-white/30 text-white hover:bg-white/10"
-                : "border-neutral-300 text-neutral-700 hover:bg-neutral-50"
-            }`}
-          >
-            Seller Login
-          </Link>
+          {seller && (
+            <Link
+              href="/seller/dashboard"
+              className={`px-3 py-2 rounded-lg flex items-center ${
+                shouldUseTransparentStyle
+                  ? "text-white hover:bg-white/10"
+                  : "text-neutral-700 hover:bg-neutral-100"
+              }`}
+            >
+              <Store size={18} className="mr-1" />
+              Dashboard
+            </Link>
+          )}
+
+          {/* Seller Login - only show if no one is logged in */}
+          {!user && !seller && (
+            <Link
+              href="/seller-login"
+              className={`px-4 py-2 rounded-lg border ${
+                shouldUseTransparentStyle
+                  ? "border-white/30 text-white hover:bg-white/10"
+                  : "border-neutral-300 text-neutral-700 hover:bg-neutral-50"
+              }`}
+            >
+              Seller Login
+            </Link>
+          )}
 
           {/* User Menu */}
           <div className="relative">
@@ -156,38 +181,120 @@ const Navbar = ({
                   : "hover:bg-neutral-100"
               }`}
             >
-              <User size={20} className={iconColorClass} />
-              
+              {/* Show different icons based on who's logged in */}
+              {user ? (
+                <>
+                  {user.avatar ? (
+                    <img 
+                      src={user.avatar} 
+                      className="w-6 h-6 rounded-full" 
+                      alt="User"
+                    />
+                  ) : (
+                    <User size={20} className={iconColorClass} />
+                  )}
+                </>
+              ) : seller ? (
+                <>
+                  {seller.profileImage ? (
+                    <img
+                      src={seller.profileImage}
+                      className="w-6 h-6 rounded-full"
+                      alt="Seller"
+                    />
+                  ) : (
+                    <Store size={20} className={iconColorClass} />
+                  )}
+                </>
+              ) : (
+                <User size={20} className={iconColorClass} />
+              )}
             </button>
 
             {isUserMenuOpen && (
-              <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+              <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                 <div className="py-1">
-                  <Link
-                    href="/login"
-                    className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    href="/signup"
-                    className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
-                  >
-                    Sign Up
-                  </Link>
-                  <div className="border-t border-neutral-200 my-1"></div>
-                  <Link
-                    href="/profile/user"
-                    className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
-                  >
-                    Profile
-                  </Link>
-                  <Link
-                    href="/orders"
-                    className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
-                  >
-                    Orders
-                  </Link>
+                  {/* Show different options based on login state */}
+                  {user ? (
+                    <>
+                      <Link
+                        href="/profile/user"
+                        className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        My Profile
+                      </Link>
+                      <Link
+                        href="/orders"
+                        className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        My Orders
+                      </Link>
+                      <div className="border-t border-neutral-200 my-1"></div>
+                      <button
+                        onClick={() => {
+                          userLogout();
+                          setIsUserMenuOpen(false);
+                        }}
+                        className="block w-full text-left px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+                      >
+                        Logout
+                      </button>
+                    </>
+                  ) : seller ? (
+                    <>
+                      <Link
+                        href="/seller/profile"
+                        className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        Seller Profile
+                      </Link>
+                      <Link
+                        href="/seller/products"
+                        className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        My Products
+                      </Link>
+                      <div className="border-t border-neutral-200 my-1"></div>
+                      <button
+                        onClick={() => {
+                          sellerLogout();
+                          setIsUserMenuOpen(false);
+                        }}
+                        className="block w-full text-left px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+                      >
+                        Seller Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        href="/login"
+                        className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        User Login
+                      </Link>
+                      <Link
+                        href="/signup"
+                        className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        User Signup
+                      </Link>
+                      <div className="border-t border-neutral-200 my-1"></div>
+                      <Link
+                        href="/seller-login"
+                        className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        Seller Login
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             )}

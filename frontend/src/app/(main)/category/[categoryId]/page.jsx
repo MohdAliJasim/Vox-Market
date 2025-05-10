@@ -22,14 +22,13 @@ const CategoryPage = () => {
     return (
       <div className="container-custom py-20 text-center">
         <h1 className="text-2xl font-bold mb-4">Category Not Found</h1>
-        <p className="mb-8">We couldn't find the category you're looking for.</p>
+        <p className="mb-8">We couldn&apos;t find the category you&apos;re looking for.</p>
         <Button to="/products" variant="primary">
           Browse Products
         </Button>
       </div>
     );
   }
-  
   // Filter products by category
   const [products, setProducts] = useState(mockProducts.filter(p => p.categoryId === categoryId));
   const [sortBy, setSortBy] = useState('featured');
@@ -61,6 +60,7 @@ const CategoryPage = () => {
     
     setProducts(sortedProducts);
   }, [sortBy, categoryId]);
+  
 
   return (
     <div className="page-transition">
@@ -183,7 +183,7 @@ const CategoryPage = () => {
             <div className="bg-white rounded-xl p-8 text-center">
               <h3 className="text-lg font-medium text-neutral-900 mb-2">No products found</h3>
               <p className="text-neutral-600 mb-4">
-                We couldn't find any products in this category right now.
+                We couldn&apos;t find any products in this category right now.
               </p>
               <Button to="/products" variant="primary">
                 Browse All Products

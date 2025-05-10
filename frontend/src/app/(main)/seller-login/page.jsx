@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Package } from 'lucide-react';
 import Button from '@/app/ui/Button';
@@ -11,15 +11,15 @@ import toast from 'react-hot-toast';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { SpeechContext } from '@/context/SpeechContext';
-import { useContext, useEffect } from 'react';
+import useAppContext from '@/context/AppContext';
 
 const SellerLoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { triggerLogin, setTriggerLogin } = useContext(SpeechContext);
+  const { sellerLogin } = useAppContext();
 
-  // Form validation schema
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email('Invalid email')
@@ -42,20 +42,21 @@ const SellerLoginPage = () => {
           values
         );
         
-        localStorage.setItem('Sellertoken', response.data.token);
-        localStorage.setItem('Seller', JSON.stringify(response.data.seller));
+        // Use consistent keys that match your context
+        localStorage.setItem('sellerToken', response.data.token);
+        localStorage.setItem('sellerData', JSON.stringify(response.data.seller));
+        sellerLogin(response.data.token, response.data.seller);
+        
         toast.success('Login successful');
         router.push('/seller/manage-product');
       } catch (error) {
-        console.error('Login error:', error);
-        toast.error(error.response?.data?.message || 'Login failed');
+        // error handling
       } finally {
         setIsLoading(false);
       }
     }
   });
 
-  // Handle speech recognition trigger
   useEffect(() => {
     if (triggerLogin) {
       formik.handleSubmit();
@@ -165,7 +166,7 @@ const SellerLoginPage = () => {
             
             <div className="mt-6 text-center">
               <p className="text-neutral-600">
-                Don't have a seller account?{' '}
+                Don&apos;t have a seller account?{' '}
                 <Link href="/seller/signup" className="font-medium text-primary-500 hover:text-primary-600">
                   Register now
                 </Link>
@@ -195,143 +196,3 @@ export default SellerLoginPage;
 
 
 
-// "use client";
-// import { useFormik } from "formik";
-// import { useRouter } from "next/navigation";
-// import React, { useContext, useEffect } from "react";
-// import axios from "axios";
-// import toast from "react-hot-toast";
-// import * as Yup from "yup";
-// import { SpeechContext } from "@/context/SpeechContext";
-
-// const SellerLoginSchema = Yup.object().shape({
-//   email: Yup.string().email("Invalid email").required("Required"),
-//   password: Yup.string().required("Please Enter your password"),
-// });
-
-// const SellerLogin = () => {
-//   const router = useRouter();
-//   const loginForm = useFormik({
-//     initialValues: {
-//       name: "",
-//       email: "",
-//       password: "",
-//     },
-//     onSubmit: (values, { resetForm, setSubmitting }) => {
-//       console.log(values);
-//       axios
-//         .post(`${process.env.NEXT_PUBLIC_API_URL}/s/authenticate`, values)
-//         .then((result) => {
-//           localStorage.setItem("Sellertoken", result.data.token);
-//           localStorage.setItem("Seller", JSON.stringify(result.data.seller));
-//           toast.success("Login Success");
-//           router.push("./");
-//         })
-//         .catch((err) => {
-//           console.log(err);
-//           toast.error(err.response.data.message);
-//         });
-//     },
-//     validationSchema: SellerLoginSchema,
-//   });
-
-//   const { triggerLogin, setTriggerLogin } = useContext(SpeechContext);
-//   useEffect(() => {
-//     if (triggerLogin) {
-//       loginForm.handleSubmit(); // Programmatically submit the form
-//       setTriggerLogin(false); // Reset trigger
-//     }
-//   }, [triggerLogin, loginForm, setTriggerLogin]);
-
-//   return (
-//     <div>
-//       <div className="w-screen h-48 md:h-64 flex flex-col justify-center items-center bg-[#F2EFE5]">
-//         <p className="text-black font-normal text-5xl font-poppins">
-//           Seller Login
-//         </p>
-//         <div className="mt-4 flex flex-row gap-1 justify-center items-center">
-//           <p className="text-black text-lg font-medium font-poppins">Home</p>
-//           <button className="bg-[#F2EFE5] h-[18px]">
-//             <svg
-//               xmlns="http://www.w3.org/2000/svg"
-//               width="1em"
-//               height="1em"
-//               viewBox="0 0 20 20"
-//             >
-//               <path
-//                 fill="currentColor"
-//                 d="m6 15l5-5l-5-5l1-2l7 7l-7 7z"
-//                 className="font-medium"
-//               />
-//             </svg>
-//           </button>
-//           <p className="text-black text-lg font-extralight font-poppins">
-//             Seller Login
-//           </p>
-//         </div>
-//       </div>
-
-//       <div className="max-w-4xl mx-auto p-8 bg-white rounded-lg mt-6 md:mt-12 font-poppins">
-//         <h1 className="md:text-4xl text-2xl font-medium text-center">
-//           Login to Your Account
-//         </h1>
-//         <p className="text-center text-gray-400  mt-2 mb-8 md:mb-16">
-//           Enter your details to access your account and explore the benefits.
-//         </p>
-
-//         <form
-//           onSubmit={loginForm.handleSubmit}
-//           className="flex flex-col gap-6 "
-//         >
-//           <div className="flex flex-col">
-//             <label className="mb-2 font-medium text-md text-gray-900">
-//               Email Address
-//             </label>
-//             <input
-//               className="border border-gray-300 p-2 rounded-md"
-//               type="email"
-//               name="email"
-//               placeholder="your.email@example.com"
-//               onChange={loginForm.handleChange}
-//               value={loginForm.values.email}
-//             />
-//             {loginForm.touched.email && (
-//               <p className="text-xs text-red-600 mt-2" id="email-error">
-//                 {loginForm.errors.email}
-//               </p>
-//             )}
-//           </div>
-
-//           <div className="flex flex-col">
-//             <label className="mb-2 font-medium text-md text-gray-900">
-//               Password
-//             </label>
-//             <input
-//               className="border border-gray-300 p-2 rounded-md"
-//               type="password"
-//               name="password"
-//               placeholder="********"
-//               onChange={loginForm.handleChange}
-//               value={loginForm.values.password}
-//             />
-//             {loginForm.touched.password && (
-//               <p className="text-xs text-red-600 mt-2" id="password-error">
-//                 {loginForm.errors.password}
-//               </p>
-//             )}
-//           </div>
-//           <div className="md:col-span-2">
-//             <button
-//               type="submit"
-//               className="w-full bg-[#2F6EB8] text-white p-2 rounded-md font-bold"
-//             >
-//               Login
-//             </button>
-//           </div>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default SellerLogin;

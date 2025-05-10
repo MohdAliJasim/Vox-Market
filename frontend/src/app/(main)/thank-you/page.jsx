@@ -38,7 +38,7 @@ const ThankYouPage = () => {
               
               <h1 className="text-3xl md:text-4xl font-bold mb-4">Thank You for Your Order!</h1>
               <p className="text-lg text-neutral-600 mb-8 max-w-xl mx-auto">
-                Your order has been successfully placed. We've sent a confirmation email with your order details.
+                Your order has been successfully placed. We&apos;ve sent a confirmation email with your order details.
               </p>
               
               <div className="bg-neutral-50 rounded-lg p-6 mb-8 text-left">
@@ -74,7 +74,7 @@ const ThankYouPage = () => {
                     <div className="ml-4">
                       <h3 className="text-sm font-medium text-neutral-900 mb-1">Shipping Information</h3>
                       <p className="text-sm text-neutral-600">
-                        You'll receive a shipping confirmation email with tracking information once your order ships.
+                        You&apos;ll receive a shipping confirmation email with tracking information once your order ships.
                       </p>
                     </div>
                   </div>

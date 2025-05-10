@@ -102,7 +102,7 @@ const ContactPage = () => {
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Us</h1>
             <p className="text-lg mb-0 text-white/90">
-              We're here to help with any questions you may have about our marketplace.
+              We&apos;re here to help with any questions you may have about our marketplace.
             </p>
           </motion.div>
         </div>

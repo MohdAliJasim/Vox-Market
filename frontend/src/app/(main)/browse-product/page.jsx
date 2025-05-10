@@ -597,7 +597,7 @@ const BrowseProductsPage = () => {
                     No products found
                   </h3>
                   <p className="text-neutral-600 mb-4">
-                    We couldn't find any products matching your criteria.
+                    We couldn&apos;t find any products matching your criteria.
                   </p>
                   <Button variant="outline" onClick={clearFilters}>
                     Clear Filters

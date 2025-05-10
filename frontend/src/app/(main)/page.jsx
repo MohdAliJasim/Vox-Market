@@ -206,7 +206,7 @@ const HomePage = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Start Selling?</h2>
             <p className="text-lg mb-8 text-white/90">
               Join thousands of sellers who have already started their journey.
-              It's free to sign up and only takes a few minutes to get your shop up and running.
+              It&apos;s free to sign up and only takes a few minutes to get your shop up and running.
             </p>
             <Button to="/seller-signup" variant="accent" size="lg" className="px-8">
               Become a Seller Today
@@ -245,7 +245,7 @@ const HomePage = () => {
                 <ArrowRight size={32} />
               </div>
               <h3 className="text-lg font-semibold mb-2">Easy Returns</h3>
-              <p className="text-neutral-600">Hassle-free return process if you're not completely satisfied with your purchase.</p>
+              <p className="text-neutral-600">Hassle-free return process if you&apos;re not completely satisfied with your purchase.</p>
             </div>
             
             <div className="flex flex-col items-center text-center p-6 rounded-lg hover:bg-neutral-50 transition-colors duration-200">
