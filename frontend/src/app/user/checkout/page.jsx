@@ -1,79 +1,253 @@
-'use client'
-import React, { useState, useEffect } from 'react';
-import { CheckCircle, Package, Truck, Home } from 'lucide-react';
+'use client';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Package, CreditCard, Truck, Shield } from 'lucide-react';
+import Button from '@/app/ui/Button';
+import FormField from '@/app/components/forms/FormField';
+import { useCart } from '@/context/CartContext';
+import { useRouter } from 'next/navigation';
 
-const deliveryStages = [
-  { name: 'Order Placed', icon: Package, description: 'Your order has been received and is being processed.' },
-  { name: 'Processing', icon: CheckCircle, description: 'We re preparing your items for shipment.' },
-  { name: 'Shipped', icon: Truck, description: 'Your package is on its way to you.' },
-  { name: 'Delivered', icon: Home, description: 'Your package has been delivered to the destination address.' },
-];
+const CheckoutPage = () => {
+  const { cartitems, clearCart } = useCart();
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    cardNumber: '',
+    expiryDate: '',
+    cvv: ''
+  });
 
-const VerticalDeliveryTimeline = ({ currentStage = 0 }) => {
-  const [progress, setProgress] = useState(0);
+  const subtotal = cartitems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const tax = subtotal * 0.1;
+  const shipping = 0;
+  const total = subtotal + tax + shipping;
 
-  useEffect(() => {
-    setProgress((currentStage / (deliveryStages.length - 1)) * 100);
-  }, [currentStage]);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Here you would typically make an API call to process the order
+      clearCart();
+      router.push('/thank-you');
+    } catch (error) {
+      console.error('Checkout error:', error);
+    }
+  };
 
   return (
-    <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Delivery Status</h2>
-      <div className="relative">
-        <div
-          className="absolute top-0 left-6 w-1 h-full bg-gray-200 transform -translate-x-1/2"
-          aria-hidden="true"
-        />
-        <div
-          className="absolute top-0 left-6 w-1 bg-blue-500 transform -translate-x-1/2 transition-all duration-500 ease-in-out"
-          style={{ height: `${progress}%` }}
-          aria-hidden="true"
-        />
-        <ul className="relative z-10 space-y-8">
-          {deliveryStages.map((stage, index) => {
-            const Icon = stage.icon;
-            const isActive = index <= currentStage;
-            const isCompleted = index < currentStage;
-            return (
-              <li key={stage.name} className="flex items-start">
-                <div className="flex-shrink-0 mr-4">
-                  <div
-                    className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                      isActive ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-400'
-                    } transition-all duration-300 ease-in-out`}
-                  >
-                    <Icon className="w-6 h-6" />
+    <div className="container-custom py-12">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Checkout Form */}
+          <div>
+            <h1 className="text-2xl font-bold mb-6">Checkout</h1>
+            
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="bg-white rounded-xl shadow-sm p-6">
+                <h2 className="text-lg font-semibold mb-4">Shipping Information</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField label="Full Name" htmlFor="fullName" required>
+                    <input
+                      type="text"
+                      id="fullName"
+                      name="fullName"
+                      value={formData.fullName}
+                      onChange={handleChange}
+                      className="form-input"
+                    />
+                  </FormField>
+
+                  <FormField label="Email" htmlFor="email" required>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="form-input"
+                    />
+                  </FormField>
+
+                  <FormField label="Phone" htmlFor="phone" required>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="form-input"
+                    />
+                  </FormField>
+
+                  <FormField label="Address" htmlFor="address" required>
+                    <input
+                      type="text"
+                      id="address"
+                      name="address"
+                      value={formData.address}
+                      onChange={handleChange}
+                      className="form-input"
+                    />
+                  </FormField>
+
+                  <FormField label="City" htmlFor="city" required>
+                    <input
+                      type="text"
+                      id="city"
+                      name="city"
+                      value={formData.city}
+                      onChange={handleChange}
+                      className="form-input"
+                    />
+                  </FormField>
+
+                  <FormField label="State" htmlFor="state" required>
+                    <input
+                      type="text"
+                      id="state"
+                      name="state"
+                      value={formData.state}
+                      onChange={handleChange}
+                      className="form-input"
+                    />
+                  </FormField>
+
+                  <FormField label="ZIP Code" htmlFor="zipCode" required>
+                    <input
+                      type="text"
+                      id="zipCode"
+                      name="zipCode"
+                      value={formData.zipCode}
+                      onChange={handleChange}
+                      className="form-input"
+                    />
+                  </FormField>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm p-6">
+                <h2 className="text-lg font-semibold mb-4">Payment Information</h2>
+                <div className="space-y-4">
+                  <FormField label="Card Number" htmlFor="cardNumber" required>
+                    <input
+                      type="text"
+                      id="cardNumber"
+                      name="cardNumber"
+                      value={formData.cardNumber}
+                      onChange={handleChange}
+                      className="form-input"
+                      placeholder="1234 5678 9012 3456"
+                    />
+                  </FormField>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField label="Expiry Date" htmlFor="expiryDate" required>
+                      <input
+                        type="text"
+                        id="expiryDate"
+                        name="expiryDate"
+                        value={formData.expiryDate}
+                        onChange={handleChange}
+                        className="form-input"
+                        placeholder="MM/YY"
+                      />
+                    </FormField>
+
+                    <FormField label="CVV" htmlFor="cvv" required>
+                      <input
+                        type="text"
+                        id="cvv"
+                        name="cvv"
+                        value={formData.cvv}
+                        onChange={handleChange}
+                        className="form-input"
+                        placeholder="123"
+                      />
+                    </FormField>
                   </div>
                 </div>
-                <div className="flex flex-col">
-                  <h3
-                    className={`text-lg font-semibold ${
-                      isActive ? 'text-blue-500' : 'text-gray-400'
-                    } transition-all duration-300 ease-in-out`}
-                  >
-                    {stage.name}
-                  </h3>
-                  <p
-                    className={`mt-1 text-sm ${
-                      isCompleted ? 'text-gray-600' : 'text-gray-400'
-                    } transition-all duration-300 ease-in-out`}
-                  >
-                    {stage.description}
-                  </p>
-                  {isCompleted && (
-                    <p className="mt-1 text-xs text-green-500">Completed on June {10 + index}, 2023</p>
-                  )}
+              </div>
+
+              <Button type="submit" variant="primary" fullWidth>
+                Place Order
+              </Button>
+            </form>
+          </div>
+
+          {/* Order Summary */}
+          <div>
+            <div className="bg-white rounded-xl shadow-sm p-6 sticky top-6">
+              <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
+              
+              <div className="space-y-4 mb-6">
+                {cartitems.map((item) => (
+                  <div key={item.productid} className="flex items-center">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-16 h-16 object-cover rounded-lg"
+                    />
+                    <div className="ml-4 flex-1">
+                      <h3 className="font-medium">{item.name}</h3>
+                      <p className="text-sm text-neutral-500">Quantity: {item.quantity}</p>
+                    </div>
+                    <p className="font-medium">${(item.price * item.quantity).toFixed(2)}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="border-t border-neutral-200 pt-4 space-y-2">
+                <div className="flex justify-between">
+                  <span>Subtotal</span>
+                  <span>${subtotal.toFixed(2)}</span>
                 </div>
-              </li>
-            )
-          })}
-        </ul>
-      </div>
-      <div className="mt-8 text-center text-gray-600">
-        Estimated delivery: <span className="font-semibold">June 15, 2023</span>
-      </div>
+                <div className="flex justify-between">
+                  <span>Tax</span>
+                  <span>${tax.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Shipping</span>
+                  <span>Free</span>
+                </div>
+                <div className="border-t border-neutral-200 pt-2 flex justify-between font-semibold">
+                  <span>Total</span>
+                  <span>${total.toFixed(2)}</span>
+                </div>
+              </div>
+
+              <div className="mt-6 space-y-4">
+                <div className="flex items-center text-sm text-neutral-600">
+                  <Shield className="h-4 w-4 mr-2 text-success-500" />
+                  <span>Secure checkout</span>
+                </div>
+                <div className="flex items-center text-sm text-neutral-600">
+                  <Truck className="h-4 w-4 mr-2 text-success-500" />
+                  <span>Free shipping on orders over $50</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 };
 
-export default VerticalDeliveryTimeline;
+export default CheckoutPage;
