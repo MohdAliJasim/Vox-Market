@@ -301,7 +301,7 @@ const Navbar = ({
           </div>
 
           <Link
-            href="/cart"
+            href="/user/cart"
             className={`p-2 rounded-lg ${
               shouldUseTransparentStyle
                 ? "hover:bg-white/10"
